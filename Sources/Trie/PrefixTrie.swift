@@ -10,7 +10,6 @@
 
 /// A prefix trie.
 public struct PrefixTrie<Value>: Trie {
-    public typealias Values = [Value]
     typealias Node = SubstringTrieNode<Value>
     typealias Nodes = [Character: Node]
         

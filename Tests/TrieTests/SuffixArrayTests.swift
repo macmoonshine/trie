@@ -22,17 +22,12 @@ fileprivate let SUFFIX_KEYWORDS = [
     "throws", "true", "try", "typealias", "var", "where", "while"
 ]
 
-func createSuffixTrie(_ length: Int = SUFFIX_KEYWORDS.count) -> SuffixTrie<String> {
-    var trie = SuffixTrie<String>()
-    
-    for keyword in SUFFIX_KEYWORDS.prefix(length) {
-        trie.insert(keyword, keyword)
-    }
-    return trie
+func createSuffixArray(_ length: Int = SUFFIX_KEYWORDS.count) -> SuffixArray<String> {
+    SuffixArray<String>(SUFFIX_KEYWORDS)
 }
 
-@Test func SuffixTrie_values() async throws {
-    let trie = createSuffixTrie()
+@Test func SuffixArray_values() async throws {
+    let trie = createSuffixArray()
     
     #expect(trie.count == SUFFIX_KEYWORDS.count)
     #expect(trie.values(for: "").sorted() == SUFFIX_KEYWORDS.sorted())
@@ -43,8 +38,8 @@ func createSuffixTrie(_ length: Int = SUFFIX_KEYWORDS.count) -> SuffixTrie<Strin
     #expect(trie.values(for: "ser") == [])
 }
 
-@Test func SuffixTrie_insert() async throws {
-    var trie = createSuffixTrie()
+@Test func SuffixArray_insert() async throws {
+    var trie = createSuffixArray()
     
     #expect(trie.count == SUFFIX_KEYWORDS.count)
     #expect(trie.contains("z") == false)
@@ -56,8 +51,8 @@ func createSuffixTrie(_ length: Int = SUFFIX_KEYWORDS.count) -> SuffixTrie<Strin
     #expect(trie.values(for: "z") == ["baz"])
 }
 
-@Test func SuffixTrie_remove() async throws {
-    var trie = createSuffixTrie()
+@Test func SuffixArray_remove() async throws {
+    var trie = createSuffixArray()
     
     #expect(trie.count == SUFFIX_KEYWORDS.count)
     #expect(trie.contains("as"))
@@ -69,9 +64,9 @@ func createSuffixTrie(_ length: Int = SUFFIX_KEYWORDS.count) -> SuffixTrie<Strin
     trie.remove("typealias")
     #expect(trie.count == SUFFIX_KEYWORDS.count - 2)
     #expect(trie.contains("as") == false)
-
-    trie = createSuffixTrie()
-        
+    
+    trie = createSuffixArray()
+    
     trie.remove(all: "per")
     #expect(trie.count == SUFFIX_KEYWORDS.count - 1)
     #expect(trie.contains("super") == false)
@@ -82,11 +77,11 @@ func createSuffixTrie(_ length: Int = SUFFIX_KEYWORDS.count) -> SuffixTrie<Strin
     #expect(trie.values(for: "a") == [])
 }
 
-@Test func SuffixTrie_smallDictionary() async throws {
+@Test func SuffixArray_smallDictionary() async throws {
     let keywords = ["deinit", "init"]
-    let trie = SuffixTrie(keywords)
+    let trie = SuffixArray(keywords)
     let dictionary = trie.dictionary()
-
+    
     #expect(trie.count == keywords.count)
     #expect(dictionary.count == keywords.count)
     #expect(dictionary.keys.sorted() == keywords.sorted())
@@ -96,8 +91,8 @@ func createSuffixTrie(_ length: Int = SUFFIX_KEYWORDS.count) -> SuffixTrie<Strin
     }
 }
 
-@Test func SuffixTrie_dictionary() async throws {
-    let trie = createSuffixTrie()
+@Test func SuffixArray_dictionary() async throws {
+    let trie = createSuffixArray()
     let dictionary = trie.dictionary()
     
     #expect(dictionary.count == SUFFIX_KEYWORDS.count)
@@ -108,8 +103,8 @@ func createSuffixTrie(_ length: Int = SUFFIX_KEYWORDS.count) -> SuffixTrie<Strin
     }
 }
 
-@Test func SuffixTrie_dictionaryLiteral() async throws {
-    let trie: SuffixTrie<String> = ["apple": "red", "banana": "yellow", "orange": "orange"]
+@Test func SuffixArray_dictionaryLiteral() async throws {
+    let trie: SuffixArray<String> = ["apple": "red", "banana": "yellow", "orange": "orange"]
     
     #expect(trie.count == 3)
     #expect(trie.values(for: "e").sorted() == ["orange", "red"])
@@ -117,8 +112,8 @@ func createSuffixTrie(_ length: Int = SUFFIX_KEYWORDS.count) -> SuffixTrie<Strin
     #expect(trie.values(for: "le") == ["red"])
 }
 
-@Test func SuffixTrie_subscript() async throws {
-    var trie: SuffixTrie<String> = ["apple": "red", "banana": "yellow", "orange": "orange"]
+@Test func SuffixArray_subscript() async throws {
+    var trie: SuffixArray<String> = ["apple": "red", "banana": "yellow", "orange": "orange"]
     
     #expect(trie["apple"] == "red")
     #expect(trie["banana"] == "yellow")

@@ -2,6 +2,26 @@
 
 This Swift package implements prefix and suffix tries. [Tries](https://en.wikipedia.org/wiki/Trie) are particularly well suited for implementing auto-completion.
                                                                
+## Data types
+
+* `PrefixTrie`: A struct that allows efficient searching of values by key prefixes. 
+* `SuffixTrie`: A struct that allows efficient searching of values by key suffixes.
+* `PrefixArray`: A struct that allows efficient searching of values by key prefixes. This implementation uses a sorted array and binary search internally.
+* `SuffixArray`: A struct that allows efficient searching of values by key suffixes. This implementation uses a sorted array and binary search internally.
+
+## Runtime
+
+The following table shows the runtime for individual operations depending on the number _n_ of elements.
+
+| Operation      | `PrefixTrie`, `SuffixTrie` | `PrefixArray`, `SuffixArray` |
+|----------------|----------------------------|------------------------------|
+| Initialization | O(_n_ log _n_)             | O(_n_ log _n_)               |
+| Searching      | O(log _n_)                 | O(log _n_)                   |
+| Insert         | O(log _n_)                 | O(_n_)                       |
+| Replace        | O(log _n_)                 | O(_n_)                       |
+| Remove         | O(log _n_)                 | O(_n_)                       |
+
+    
 ## Examples
 
 Finding fruit names by a prefix:

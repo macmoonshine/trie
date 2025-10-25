@@ -22,17 +22,12 @@ fileprivate let PREFIX_KEYWORDS = [
     "throws", "true", "try", "typealias", "var", "where", "while"
 ]
 
-func createPrefixTrie(_ length: Int = PREFIX_KEYWORDS.count) -> PrefixTrie<String> {
-    var trie = PrefixTrie<String>()
-    
-    for keyword in PREFIX_KEYWORDS.prefix(length) {
-        trie.insert(keyword, keyword)
-    }
-    return trie
+func createPrefixArray() -> PrefixArray<String> {
+    PrefixArray<String>(PREFIX_KEYWORDS)
 }
 
-@Test func PrefixTrie_values() async throws {
-    let trie = createPrefixTrie()
+@Test func PrefixArray_values() async throws {
+    let trie = createPrefixArray()
     
     #expect(trie.count == PREFIX_KEYWORDS.count)
     #expect(trie.values(for: "").sorted() == PREFIX_KEYWORDS.sorted())
@@ -43,8 +38,8 @@ func createPrefixTrie(_ length: Int = PREFIX_KEYWORDS.count) -> PrefixTrie<Strin
     #expect(trie.values(for: "wha") == [])
 }
 
-@Test func PrefixTrie_insert() async throws {
-    var trie = createPrefixTrie()
+@Test func PrefixArray_insert() async throws {
+    var trie = createPrefixArray()
     
     #expect(trie.count == PREFIX_KEYWORDS.count)
     #expect(trie.contains(any: "T") == false)
@@ -57,32 +52,31 @@ func createPrefixTrie(_ length: Int = PREFIX_KEYWORDS.count) -> PrefixTrie<Strin
     #expect(trie.values(for: "T") == ["Type"])
 }
 
-@Test func PrefixTrie_remove() async throws {
-    var trie = createPrefixTrie()
+@Test func PrefixArray_remove() async throws {
+    var trie = createPrefixArray()
     
     #expect(trie.count == PREFIX_KEYWORDS.count)
-    #expect(trie.contains("as"))
+    #expect(trie.contains("as") == true)
     #expect(trie.values(for: "as").sorted() == ["as", "associatedtype"])
     trie.remove("as")
     #expect(trie.count == PREFIX_KEYWORDS.count - 1)
     #expect(trie.contains("as") == false)
-    #expect(trie.contains(any: "as"))
     #expect(trie.values(for: "as") == ["associatedtype"])
     
-    trie = createPrefixTrie()
+    trie = createPrefixArray()
     
-    #expect(trie.contains("associatedtype"))
+    #expect(trie.contains("associatedtype") == true)
     #expect(trie.values(for: "as").sorted() == ["as", "associatedtype"])
     trie.remove("ass")
     #expect(trie.count == PREFIX_KEYWORDS.count)
-    #expect(trie.contains("associatedtype"))
+    #expect(trie.contains("associatedtype") == true)
     #expect(trie.values(for: "as").sorted() == ["as", "associatedtype"])
     trie.remove("associatedtype")
     #expect(trie.count == PREFIX_KEYWORDS.count - 1)
     #expect(trie.contains("associatedtype") == false)
     #expect(trie.values(for: "as").sorted() == ["as"])
     
-    trie = createPrefixTrie()
+    trie = createPrefixArray()
     
     trie.remove(all: "ass")
     #expect(trie.count == PREFIX_KEYWORDS.count - 1)
@@ -94,21 +88,22 @@ func createPrefixTrie(_ length: Int = PREFIX_KEYWORDS.count) -> PrefixTrie<Strin
     #expect(trie.values(for: "a") == [])
 }
 
-@Test func PrefixTrie_removeSmall() async throws {
-    var trie: PrefixTrie = ["as", "associatedtype"]
+@Test func PrefixArray_removeSmall() async throws {
+    var trie: PrefixArray = ["as", "associatedtype"]
     
     #expect(trie.count == 2)
-    #expect(trie.contains("as") == true)
+    #expect(trie.contains("as"))
     #expect(trie.values(for: "as").sorted() == ["as", "associatedtype"])
     trie.remove("as")
     #expect(trie.count == 1)
     #expect(trie.contains("as") == false)
+    #expect(trie.contains(any: "as"))
     #expect(trie.values(for: "as") == ["associatedtype"])
 }
 
-@Test func PrefixTrie_smallDictionary() async throws {
+@Test func PrefixArray_smallDictionary() async throws {
     let keywords = ["else", "enum"]
-    let trie = PrefixTrie(keywords)
+    let trie = PrefixArray(keywords)
     let dictionary = trie.dictionary()
     
     #expect(dictionary.count == keywords.count)
@@ -119,8 +114,8 @@ func createPrefixTrie(_ length: Int = PREFIX_KEYWORDS.count) -> PrefixTrie<Strin
     }
 }
 
-@Test func PrefixTrie_dictionary() async throws {
-    let trie = createPrefixTrie()
+@Test func PrefixArray_dictionary() async throws {
+    let trie = createPrefixArray()
     let dictionary = trie.dictionary()
     
     #expect(dictionary.count == PREFIX_KEYWORDS.count)
@@ -131,8 +126,8 @@ func createPrefixTrie(_ length: Int = PREFIX_KEYWORDS.count) -> PrefixTrie<Strin
     }
 }
 
-@Test func PrefixTrie_dictionaryLiteral() async throws {
-    let trie: PrefixTrie<String> = ["apple": "red", "banana": "yellow", "apricot": "orange"]
+@Test func PrefixArray_dictionaryLiteral() async throws {
+    let trie: PrefixArray<String> = ["apple": "red", "banana": "yellow", "apricot": "orange"]
     
     #expect(trie.count == 3)
     #expect(trie.values(for: "a").sorted() == ["orange", "red"])
@@ -140,14 +135,14 @@ func createPrefixTrie(_ length: Int = PREFIX_KEYWORDS.count) -> PrefixTrie<Strin
     #expect(trie.values(for: "app") == ["red"])
 }
 
-@Test func PrefixTrie_subscript() async throws {
-    var trie: PrefixTrie<String> = ["apple": "red", "banana": "yellow", "apricot": "orange"]
+@Test func PrefixArray_subscript() async throws {
+    var trie: PrefixArray<String> = ["apple": "red", "banana": "yellow", "apricot": "orange"]
     
     #expect(trie["apple"] == "red")
     #expect(trie["banana"] == "yellow")
     #expect(trie["apricot"] == "orange")
     #expect(trie["ap"] == nil)
-
+    
     trie["plum"] = "violet"
     #expect(trie["plum"] == "violet")
     trie["apple"] = "green"

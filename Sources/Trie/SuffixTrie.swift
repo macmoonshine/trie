@@ -10,7 +10,6 @@
 
 /// A suffix trie.
 public struct SuffixTrie<Value>: Trie {
-    public typealias Values = [Value]
     typealias Node = SubstringTrieNode<Value>
     typealias Nodes = [Character: Node]
     
@@ -138,11 +137,5 @@ extension SuffixTrie: ExpressibleByArrayLiteral where Value == String {
     
     public init(arrayLiteral strings: String...) {
         self.init(strings)
-    }
-}
-
-fileprivate extension StringProtocol {
-    var reversedString: String {
-        String(reversed())
     }
 }

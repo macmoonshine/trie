@@ -35,8 +35,9 @@ struct SubstringTrieNode<Value> {
     
     func contains<Suffix>(_ suffix: Suffix, isPrefix: Bool = false) -> Bool where Suffix: StringProtocol {
         if let node = child(for: suffix, isPrefix: isPrefix) {
-            guard let remainder = suffix.suffix(at: node.part.count) else {
-                return !node.isEmpty
+            guard let remainder = suffix.suffix(at: node.part.count),
+                    !remainder.isEmpty else {
+                return node.value != nil || isPrefix && !node.isEmpty
             }
             
             return node.contains(remainder, isPrefix: isPrefix)
@@ -196,40 +197,3 @@ struct SubstringTrieNode<Value> {
 
 extension SubstringTrieNode: Sendable where Value: Sendable {
 }
-
-fileprivate extension StringProtocol {
-    func suffix(at length: Int) -> Self.SubSequence? {
-        if length > count {
-            return nil
-        }
-        else {
-            let index = index(startIndex, offsetBy: length)
-            return suffix(from: index)
-        }
-    }
-    
-    func prefix<S>(common string: S) -> SubSequence where S: StringProtocol {
-        var i1 = startIndex
-        var i2 = string.startIndex
-        
-        while i1 < endIndex && i2 < string.endIndex && self[i1] == string[i2] {
-            i1 = index(after: i1)
-            i2 = string.index(after: i2)
-        }
-        return self[..<i1]
-    }
-    
-    func length<S>(common string: S) -> Int where S: StringProtocol {
-        var i1 = startIndex
-        var i2 = string.startIndex
-        var count = 0
-        
-        while i1 < endIndex && i2 < string.endIndex && self[i1] == string[i2] {
-            count += 1
-            i1 = index(after: i1)
-            i2 = string.index(after: i2)
-        }
-        return count
-    }
-}
-
