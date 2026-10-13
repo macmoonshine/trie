@@ -1,5 +1,12 @@
 # Trie
 
+[![CI](https://github.com/macmoonshine/trie/actions/workflows/swift.yml/badge.svg)](https://github.com/macmoonshine/trie/actions/workflows/swift.yml)
+[![Swift](https://img.shields.io/badge/Swift-6.1%2B-orange?logo=swift)](https://swift.org)
+[![Swift Package Manager](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen?logo=swift)](https://swift.org/package-manager/)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/macmoonshine/trie)](https://github.com/macmoonshine/trie/issues)
+[![Stars](https://img.shields.io/github/stars/macmoonshine/trie)](https://github.com/macmoonshine/trie/stargazers)
+
 This Swift package implements prefix and suffix tries. [Tries](https://en.wikipedia.org/wiki/Trie) are particularly well suited for implementing auto-completion.
                                                                
 ## Data types
